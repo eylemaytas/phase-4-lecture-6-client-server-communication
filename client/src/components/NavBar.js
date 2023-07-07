@@ -4,11 +4,13 @@ function NavBar(){
     return (
         <nav>
             <div>
-                <NavLink to="/">Home</NavLink>
+                <NavLink to="/continents">Continents</NavLink>
             </div>
             <div>
-                <NavLink to="/add_hotel">Add Hotel</NavLink>
-                <NavLink to="/update_hotel">Update Hotel</NavLink>
+                <NavLink to="/cities">Destination</NavLink>
+                <NavLink to="/foods">Food & Travel</NavLink>
+                <NavLink to="/blogs">Blog</NavLink>
+                <NavLink to="/login">Login</NavLink>
             </div>
         </nav>
     )

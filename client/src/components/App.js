@@ -4,33 +4,33 @@ import { Route, Switch } from "react-router-dom"
 
 import NavBar from './NavBar'
 import Header from './Header'
-import HotelList from './HotelList'
-import NewHotelForm from './NewHotelForm'
-import UpdateHotelForm from './UpdateHotelForm'
+import CityList from './CityList'
+import NewCityForm from './NewCityForm'
+import UpdateCityForm from './UpdateCityForm'
 
 function App() {
 
-  const [hotels, setHotels] = useState([])
+  const [cities, setCities] = useState([])
   const [postFormData, setPostFormData] = useState({})
   const [idToUpdate, setIdToUpdate] = useState(0)
   const [patchFormData, setPatchFormData] = useState({})
 
   useEffect(() => {
-    fetch('/hotels')
+    fetch('/cities')
     .then(response => response.json())
-    .then(hotelData => setHotels(hotelData))
+    .then(citiesData => setCities(citiesData))
   }, [])
 
   useEffect(() => {
-    if(hotels.length > 0 && hotels[0].id){
-      setIdToUpdate(hotels[0].id)
+    if(cities.length > 0 && cities[0].id){
+      setIdToUpdate(cities[0].id)
     }
-  }, [hotels])
+  }, [cities])
 
-  function addHotel(event){
+  function addCities(event){
     event.preventDefault()
 
-    fetch('/hotels', {
+    fetch('/cities', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -39,12 +39,12 @@ function App() {
       body: JSON.stringify(postFormData)
     })
     .then(response => response.json())
-    .then(newHotel => setHotels(hotels => [...hotels, newHotel]))
+    .then(newCity => setCities(cities => [...cities, newCity]))
   }
 
-  function updateHotel(event){
+  function updateCity(event){
     event.preventDefault()
-    fetch(`/hotels/${idToUpdate}`, {
+    fetch(`/cities/${idToUpdate}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -53,27 +53,27 @@ function App() {
       body: JSON.stringify(patchFormData)
     })
     .then(response => response.json())
-    .then(updatedHotel => {
-      setHotels(hotels => {
-        return hotels.map(hotel => {
-          if(hotel.id === updatedHotel.id){
-            return updatedHotel
+    .then(updatedCity => {
+      setCities(cities => {
+        return cities.map(city => {
+          if(city.id === updatedCity.id){
+            return updatedCity
           }
           else{
-            return hotel
+            return city
           }
         })
       })
     })
   }
 
-  function deleteHotel(id){
-    fetch(`/hotels/${id}`, {
+  function deleteCity(id){
+    fetch(`/cities/${id}`, {
       method: "DELETE"
     })
-    .then(() => setHotels(hotels => {
-      return hotels.filter(hotel => {
-        return hotel.id !== id
+    .then(() => setCities(cities => {
+      return cities.filter(city => {
+        return city.id !== id
       })
     }))
   }
@@ -86,20 +86,73 @@ function App() {
     setPatchFormData({...patchFormData, [event.target.name]: event.target.value})
   }
 
+
+  // return (
+  //   <div className="app">
+  //     <div className='header'>
+  //       <Header logoClick={logoClick} />
+  //       <Nav />
+  //     </div>
+  //     <Switch>
+  //       <Route exact path="/">
+  //         <Login />
+  //       </Route>
+  //       <Route exact path="/home">
+  //         <Homepage manufacturerFocusSelector={manufacturerFocusSelector}/>
+  //       </Route>
+  //       <Route exact path="/cities">
+  //         <CityList cityFocusSelector={cityFocusSelector} cities={cities}/>
+  //         <Search setSearchText={setSearchText} onlineChecker={onlineChecker} />
+  //       </Route>
+  //       <Route exact path="/foods">
+  //         <FoodList foods={filteredFoods} foodFocusSelector={foodFocusSelector} />
+  //       </Route>
+  //       <Route exact path="/continents">
+  //         <ContinentList continents={continents} continentFocusSelector={continentFocusSelector} />
+  //       </Route>
+  //       <Route exact path="/devicefocus">
+  //         <DeviceFocus focusDevice={focusDevice} />
+  //       </Route>
+  //       <Route exact path="/developerfocus">
+  //         <DeveloperFocus focusDeveloper={focusDeveloper} />
+  //       </Route>
+  //       <Route exact path="/gamefocus">
+  //         <GameFocus focusGame={focusGame}/>
+  //       </Route>
+  //       <Route exact path='/manufacturerfocus'>
+  //         <ManufacturerFocus deviceFocusSelector={deviceFocusSelector} focusManufacturer={focusManufacturer} />
+  //       </Route>
+  //       <Route exact path='/relationships'>
+  //         <RelationshipManager relationshipButton={relationshipButton} />
+  //       </Route>
+  //       <Route exact path='/relationships/new_relationship'>
+  //         <NewRelationship addRelationship={addRelationship} updateNewRelationship={updateNewRelationship}/>
+  //       </Route>
+  //       <Route exact path="/games/new_game">
+  //         <NewGameForm  updateFormData={updateFormData} addGame={addGame}/>
+  //       </Route>
+  //     </Switch>
+  //     <Footer />
+  //   </div>
+  // );
+
   return (
     <div className="app">
       <NavBar/>
       <Header />
       <Switch>
-        <Route exact path="/">
-          <h1>Welcome! Here is the list of hotels available:</h1>
-          <HotelList hotels={hotels} deleteHotel={deleteHotel}/>
+        <Route exact path="/continents">
+          <h1>Continents:</h1>
         </Route>
-        <Route path="/add_hotel">
-          <NewHotelForm addHotel={addHotel} updatePostFormData={updatePostFormData}/>
+        <Route path="/cities">
+          <CityList cities={cities} deleteCity={deleteCity} addCities = {addCities} updatePostFormData={updatePostFormData}/>
+          <NewCityForm addCity={addCities} updatePostFormData={updatePostFormData}/>
+          <UpdateCityForm updateCity={updateCity} setIdToUpdate={setIdToUpdate} updatePatchFormData={updatePatchFormData} cities={cities}/>
         </Route>
-        <Route path="/update_hotel">
-          <UpdateHotelForm updateHotel={updateHotel} setIdToUpdate={setIdToUpdate} updatePatchFormData={updatePatchFormData} hotels={hotels}/>
+        <Route path="/foods">
+        </Route>
+
+        <Route path="/blogs">
         </Route>
       </Switch>
     </div>
